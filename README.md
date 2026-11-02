@@ -34,7 +34,8 @@ No account, no server, no telemetry.
 | 📺 **Live TV, movies and series** | Imports M3U/M3U8 playlists from a URL or a file, and Xtream Codes accounts. Catalogs with hundreds of thousands of titles stay smooth. |
 | 🗓️ **TV guide and catch-up** | XMLTV program grid, what's on now right in your lists, and past shows when your provider supports it. |
 | ⬇️ **Downloads** | Keep a movie, an episode or a whole season to watch offline, in the folder of your choice. Downloads resume on their own after a dropped connection. |
-| 🔁 **Playback that holds up** | A brief dropout? The stream reconnects by itself and stays in full screen. |
+| 🔁 **Playback that holds up** | A brief dropout? The stream reconnects by itself and stays in full screen. A channel stuck? The refresh button reopens it without switching away. |
+| 📱 **On your phone** | Picture in picture while you use other apps, and a radio mode that keeps the sound playing with the screen locked. |
 | 🔎 **Instant search** | Handles accents and typos, with sorting and country filters. |
 | ⭐ **Favorites your way** | General favorites, or as many lists as you like, each with its own name, icon and order. |
 | ✨ **FILTERED** | Automatically sorts your provider's hundreds of groups by region, country and theme. Your playlists are never changed. |
