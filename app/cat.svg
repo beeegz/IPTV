@@ -12,37 +12,40 @@
   <clipPath id="frame"><rect width="512" height="512" rx="112"/></clipPath></defs>
   
   <g class="breath">
-    <!-- poitrail blanc + tache rousse -->
     <g clip-path="url(#frame)">
-      <path d="M96 540c0-90 70-150 160-150s160 60 160 150z" fill="#fbfaf7"/>
-      <path d="M352 440c40-10 64 20 64 100h-90c20-30 30-70 26-100z" fill="#d98a3d"/>
+      <path d="M104 540c0-80 60-120 152-120s152 40 152 120z" fill="#fbfaf7"/>
+      <path d="M356 452c36-6 58 22 58 88h-84c18-26 28-56 26-88z" fill="#e0913f"/>
     </g>
-    <!-- oreilles -->
-    <g class="ear-l"><polygon points="118,250 128,96 240,176" fill="#8f6f4c" stroke="#8f6f4c" stroke-width="14" stroke-linejoin="round"/>
-      <polygon points="138,226 144,132 210,182" fill="#f0b5ad"/><polygon points="128,96 138,150 170,132" fill="#3a2f28"/></g>
-    <g class="ear-r"><polygon points="394,250 384,96 272,176" fill="#8f6f4c" stroke="#8f6f4c" stroke-width="14" stroke-linejoin="round"/>
-      <polygon points="374,226 368,132 302,182" fill="#f0b5ad"/><polygon points="384,96 374,150 342,132" fill="#3a2f28"/></g>
-    <!-- tête tigrée -->
-    <clipPath id="head"><ellipse cx="256" cy="298" rx="152" ry="124"/></clipPath>
-    <ellipse cx="256" cy="298" rx="152" ry="124" fill="#9a7a55"/>
+    <!-- petites pattes -->
+    <ellipse cx="208" cy="468" rx="30" ry="22" fill="#fff"/><ellipse cx="304" cy="468" rx="30" ry="22" fill="#fff"/>
+    <g stroke="#f3c3c0" stroke-width="5" stroke-linecap="round"><path d="M200 470v6M210 470v6M220 470v6M296 470v6M306 470v6M316 470v6"/></g>
+    <!-- oreilles arrondies -->
+    <g class="ear-l"><polygon points="120,238 132,112 232,176" fill="#8f6f4c" stroke="#8f6f4c" stroke-width="34" stroke-linejoin="round"/>
+      <polygon points="142,214 148,142 202,180" fill="#f5b9b4" stroke="#f5b9b4" stroke-width="12" stroke-linejoin="round"/></g>
+    <g class="ear-r"><polygon points="392,238 380,112 280,176" fill="#8f6f4c" stroke="#8f6f4c" stroke-width="34" stroke-linejoin="round"/>
+      <polygon points="370,214 364,142 310,180" fill="#f5b9b4" stroke="#f5b9b4" stroke-width="12" stroke-linejoin="round"/></g>
+    <!-- grosse tête ronde -->
+    <clipPath id="head"><ellipse cx="256" cy="304" rx="176" ry="140"/></clipPath>
+    <ellipse cx="256" cy="304" rx="176" ry="140" fill="#9a7a55"/>
     <g clip-path="url(#head)">
-      <path d="M190 160c20-24 112-24 132 0l-20 40h-92z" fill="#3a2f28"/>
-      <path d="M205 206l10 -34M235 200l6 -34M277 200l-6 -34M307 206l-10 -34" stroke="#9a7a55" stroke-width="7" stroke-linecap="round"/>
-      <ellipse cx="206" cy="214" rx="26" ry="34" fill="#d98a3d" transform="rotate(14 206 214)"/>
-      <ellipse cx="306" cy="214" rx="26" ry="34" fill="#d98a3d" transform="rotate(-14 306 214)"/>
-      <path d="M108 292q24 4 44 -2M404 292q-24 4 -44 -2" stroke="#3a2f28" stroke-width="12" stroke-linecap="round" fill="none"/>
-      <!-- liste blanche + museau + joues -->
-      <path d="M236 170q20-14 40 0l16 96q44 30 66 84q-20 80-102 80t-102-80q22-54 66-84z" fill="#fbfaf7"/>
-      <ellipse cx="256" cy="376" rx="128" ry="62" fill="#fbfaf7"/>
+      <path d="M180 150c30-24 122-24 152 0l-22 44h-108z" fill="#3a2f28"/>
+      <path d="M212 196l8 -30M240 192l5 -30M272 192l-5 -30M300 196l-8 -30" stroke="#9a7a55" stroke-width="8" stroke-linecap="round"/>
+      <ellipse cx="202" cy="212" rx="30" ry="38" fill="#e0913f" transform="rotate(14 202 212)"/>
+      <ellipse cx="310" cy="212" rx="30" ry="38" fill="#e0913f" transform="rotate(-14 310 212)"/>
+      <path d="M234 160q22-12 44 0l14 110q50 30 76 90q-22 90-112 90t-112-90q26-60 76-90z" fill="#fffdf9"/>
+      <ellipse cx="256" cy="392" rx="140" ry="70" fill="#fffdf9"/>
     </g>
-    <!-- yeux -->
-    <g class="eye" style="transform-origin:200px 290px"><path d="M162 292q38-40 76 0q-38 34-76 0z" fill="#b4b982" stroke="#3a2f28" stroke-width="9" stroke-linejoin="round"/><ellipse cx="200" cy="291" rx="5" ry="20" fill="#2b2a1c"/><circle cx="212" cy="283" r="5" fill="#fff" opacity=".8"/></g>
-    <g class="eye" style="transform-origin:312px 290px"><path d="M274 292q38-40 76 0q-38 34-76 0z" fill="#b4b982" stroke="#3a2f28" stroke-width="9" stroke-linejoin="round"/><ellipse cx="312" cy="291" rx="5" ry="20" fill="#2b2a1c"/><circle cx="324" cy="283" r="5" fill="#fff" opacity=".8"/></g>
-    <!-- nez & bouche -->
-    <path d="M232 338q24-12 48 0q-4 22-24 32q-20-10-24-32z" fill="#ec9fa0"/>
-    <path d="M256 370v12m0 0q-12 12-26 2m26-2q12 12 26 2" fill="none" stroke="#b97d7d" stroke-width="5" stroke-linecap="round"/>
+    <!-- joues roses -->
+    <ellipse cx="148" cy="364" rx="28" ry="16" fill="#ff9fb2" opacity=".55"/>
+    <ellipse cx="364" cy="364" rx="28" ry="16" fill="#ff9fb2" opacity=".55"/>
+    <!-- gros yeux brillants -->
+    <g class="eye" style="transform-origin:190px 304px"><circle cx="190" cy="304" r="38" fill="#a9cf86" stroke="#3a2f28" stroke-width="7"/><ellipse cx="190" cy="306" rx="22" ry="28" fill="#1d2418"/><circle cx="204" cy="290" r="11" fill="#fff"/><circle cx="178" cy="322" r="5.500" fill="#fff" opacity=".9"/></g>
+    <g class="eye" style="transform-origin:322px 304px"><circle cx="322" cy="304" r="38" fill="#a9cf86" stroke="#3a2f28" stroke-width="7"/><ellipse cx="322" cy="306" rx="22" ry="28" fill="#1d2418"/><circle cx="336" cy="290" r="11" fill="#fff"/><circle cx="310" cy="322" r="5.500" fill="#fff" opacity=".9"/></g>
+    <!-- petit nez et sourire -->
+    <path d="M243 354q13-8 26 0q-3 12-13 17q-10-5-13-17z" fill="#f08fa0"/>
+    <path d="M256 371v8m0 0q-9 12-22 3m22-3q9 12 22 3" fill="none" stroke="#b5707c" stroke-width="5" stroke-linecap="round"/>
     <g class="whisk" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".9">
-      <path d="M170 354q-50-8-92-30M170 366q-52 4-100 -2M342 354q50-8 92-30M342 366q52 4 100 -2"/>
+      <path d="M110 346q-30-6-52-20M108 366q-32 2-56-6M402 346q30-6 52-20M404 366q32 2 56-6"/>
     </g>
   </g>
 </svg>
