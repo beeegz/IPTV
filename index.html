@@ -65,21 +65,42 @@
 <dialog id="sourceDlg">
   <form method="dialog" id="sourceForm">
     <h2>Ajouter une source</h2>
-    <p class="muted">Playlist M3U/M3U8 (URL ou fichier). Vos données restent dans ce navigateur.</p>
-    <label>URL de la playlist
-      <input id="srcUrl" type="url" placeholder="https://exemple.com/playlist.m3u">
-    </label>
-    <label>…ou fichier M3U
-      <input id="srcFile" type="file" accept=".m3u,.m3u8,.txt,audio/x-mpegurl">
-    </label>
+    <div class="seg" id="srcType">
+      <button type="button" class="on" data-t="xtream">Xtream (identifiants)</button>
+      <button type="button" data-t="m3u">Playlist M3U</button>
+    </div>
+    <div id="fsXtream">
+      <label>URL du serveur
+        <input id="xUrl" type="text" inputmode="url" autocapitalize="off" autocorrect="off" placeholder="http://exemple.com:8080">
+      </label>
+      <label>Nom d'utilisateur
+        <input id="xUser" type="text" autocapitalize="off" autocorrect="off" autocomplete="username">
+      </label>
+      <label>Mot de passe
+        <input id="xPass" type="password" autocomplete="current-password">
+      </label>
+      <div class="checks">
+        <label><input type="checkbox" id="xLive" checked> Direct</label>
+        <label><input type="checkbox" id="xMovies" checked> Films</label>
+        <label><input type="checkbox" id="xSeries"> Séries</label>
+      </div>
+    </div>
+    <div id="fsM3u" hidden>
+      <label>URL de la playlist
+        <input id="srcUrl" type="url" placeholder="https://exemple.com/playlist.m3u">
+      </label>
+      <label>…ou fichier M3U
+        <input id="srcFile" type="file" accept=".m3u,.m3u8,.txt,audio/x-mpegurl">
+      </label>
+    </div>
     <p class="err" id="srcErr"></p>
     <div class="row">
-      <button type="button" class="btn ghost" id="loadDemo">Charger la démo</button>
+      <button type="button" class="btn ghost" id="loadDemo">Démo</button>
       <span class="spacer"></span>
       <button type="button" class="btn ghost" id="srcCancel">Annuler</button>
       <button type="submit" class="btn" id="srcOk">Importer</button>
     </div>
-    <p class="muted small">Mimou TV est seulement un lecteur : aucune chaîne n'est fournie. Certains serveurs bloquent l'accès depuis un navigateur (CORS) : téléchargez alors le fichier et importez-le.</p>
+    <p class="muted small">Mimou TV est seulement un lecteur : aucune chaîne n'est fournie. Vos identifiants restent dans ce navigateur. Certains serveurs bloquent l'accès depuis un navigateur (CORS / HTTP) ; l'application Android n'a pas cette limite.</p>
   </form>
 </dialog>
 

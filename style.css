@@ -204,3 +204,11 @@ dialog .row{display:flex;gap:8px;margin-top:20px;align-items:center;flex-wrap:wr
 @media (max-width:760px){.peek.cat{width:84px}}
 .cat-tail{position:absolute;inset:0;transform-origin:87.4% 92.5%;animation:wag 2.2s ease-in-out infinite}
 @keyframes wag{0%,100%{transform:rotate(-1deg)}20%{transform:rotate(7deg)}40%{transform:rotate(0)}60%{transform:rotate(6deg)}80%{transform:rotate(0)}}
+
+.seg{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:4px;margin-top:14px}
+.seg button{flex:1;padding:8px;border-radius:7px;color:var(--muted);font-weight:600}
+.seg button.on{background:var(--accent);color:#fff}
+.checks{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px}
+.checks label{display:flex;align-items:center;gap:6px;margin:0;font-weight:500}
+.checks input{width:auto;margin:0}
+[hidden]{display:none!important}
