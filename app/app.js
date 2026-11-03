@@ -103,7 +103,7 @@ function thumb(c, poster) {
   return t;
 }
 /* Mascotte : corps + tête animée (inclinaison, clignement) */
-const mascot = cls => `<div class="cat ${cls}"><img class="cat-body" src="cat-body.png" alt=""><div class="cat-head"><img src="cat-head.png" alt=""><i class="lid n"></i><i class="lid f"></i></div></div>`;
+const mascot = cls => `<div class="cat ${cls}"><img class="cat-tail" src="cat-tail.png" alt=""><img class="cat-body" src="cat-body.png" alt=""><div class="cat-head"><img src="cat-head.png" alt=""><i class="lid n"></i><i class="lid f"></i></div></div>`;
 let cardN = 0;
 function card(c) {
   const b = el('div', 'card'); b.style.animationDelay = Math.min(cardN++ % 12, 11) * 40 + 'ms'; b.tabIndex = 0; b.setAttribute('role', 'button'); b.setAttribute('aria-label', c.name);
