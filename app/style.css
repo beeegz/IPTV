@@ -107,7 +107,7 @@ main{padding-bottom:40px}
 .meta{flex:1;min-width:0}
 .meta h2{font-size:1.15em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .meta p{color:#bbb;font-size:13px}
-.status{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;text-align:center;padding:20px;font-weight:600;text-shadow:0 2px 8px #000}
+.status{position:absolute;inset:0;pointer-events:none;text-align:center;padding:20px;font-weight:600;text-shadow:0 2px 8px #000}
 .zap{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:80px;font-size:44px;background:#0005;border-radius:10px;transition:opacity .3s}
 .zap.prev{left:10px}.zap.next{right:10px}
 .sidelist{background:var(--bg);color:var(--text);overflow-y:auto;padding:14px;border-left:1px solid var(--line)}
@@ -163,3 +163,27 @@ dialog .row{display:flex;gap:8px;margin-top:20px;align-items:center;flex-wrap:wr
 }
 @media (max-width:760px) and (orientation:landscape){.player{grid-template-columns:1fr 38%;grid-template-rows:1fr}.sidelist{border-top:0;border-left:1px solid var(--line)}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* ---- Mascotte & animations ---- */
+.brand img{transition:transform .3s}
+.brand:hover img{animation:wiggle .6s}
+@keyframes wiggle{25%{transform:rotate(-12deg) scale(1.1)}60%{transform:rotate(10deg) scale(1.1)}}
+.card{animation:rise .5s both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+.fav.pop{animation:pop .45s}
+@keyframes pop{40%{transform:scale(1.5) rotate(15deg)}}
+.hero .info>*{animation:rise .7s both}.hero .info>*:nth-child(2){animation-delay:.1s}.hero .info>*:nth-child(3){animation-delay:.2s}.hero .info>*:nth-child(4){animation-delay:.3s}
+.hero .bgimg{animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-54%)}}
+.peek{position:absolute;right:5%;bottom:-6px;width:clamp(120px,17vw,210px);z-index:2;pointer-events:none;animation:peek 1s .3s cubic-bezier(.2,1.4,.4,1) both;filter:drop-shadow(0 -6px 20px #0006)}
+@keyframes peek{from{transform:translateY(100%)}}
+.hero .bgimg{right:calc(4% + 220px)}
+.mascot{width:150px;height:150px;margin-bottom:14px;animation:float2 3.5s ease-in-out infinite}
+.mascot.sm{width:96px;height:96px}
+@keyframes float2{50%{transform:translateY(-8px) rotate(-3deg)}}
+.status{flex-direction:column;gap:10px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+.status.on{opacity:1;background:#0006}
+.status img{width:84px;height:84px;animation:bounce 1s ease-in-out infinite}
+@keyframes bounce{50%{transform:translateY(-12px)}}
+.toast::before{content:"🐾 "}
+@media (max-width:760px){.peek{width:104px;right:3%}.hero .bgimg{right:-10%}}

@@ -102,12 +102,13 @@ function thumb(c, poster) {
   if (c.kind === 'live') t.append(el('span', 'live', 'DIRECT'));
   return t;
 }
+let cardN = 0;
 function card(c) {
-  const b = el('div', 'card'); b.tabIndex = 0; b.setAttribute('role', 'button'); b.setAttribute('aria-label', c.name);
+  const b = el('div', 'card'); b.style.animationDelay = Math.min(cardN++ % 12, 11) * 40 + 'ms'; b.tabIndex = 0; b.setAttribute('role', 'button'); b.setAttribute('aria-label', c.name);
   b.append(thumb(c, c.kind !== 'live'));
   const f = el('button', 'fav' + (state.favs.has(c.id) ? ' on' : ''), state.favs.has(c.id) ? '★' : '☆');
   f.title = 'Favori'; f.setAttribute('aria-label', 'Ajouter aux favoris');
-  f.onclick = e => { e.stopPropagation(); toggleFav(c.id); f.classList.toggle('on', state.favs.has(c.id)); f.textContent = state.favs.has(c.id) ? '★' : '☆'; if (state.view === 'favs') render(); };
+  f.onclick = e => { e.stopPropagation(); toggleFav(c.id); f.classList.toggle('on', state.favs.has(c.id)); f.classList.remove('pop'); void f.offsetWidth; f.classList.add('pop'); f.textContent = state.favs.has(c.id) ? '★' : '☆'; if (state.view === 'favs') render(); };
   b.append(f);
   b.append(el('div', 'cinfo', `<div class="cname">${esc(c.name)}</div><div class="csub">${esc(catOf(c))}</div>`));
   b.onclick = () => play(c, visible(c));
@@ -157,7 +158,7 @@ function render() {
     const list = filtered();
     const title = searching ? `Résultats pour « ${state.query.trim()} »` : ({ home: 'Tout', live: 'Chaînes en direct', movies: 'Films', series: 'Séries', favs: 'Mes favoris' }[state.view]) + (state.cat !== 'all' ? ' · ' + state.cat : '');
     content.append(el('div', 'heading', `<h2>${esc(title)}</h2><span>${list.length} élément${list.length > 1 ? 's' : ''}</span>`));
-    if (!list.length) { content.append(el('div', 'empty', state.view === 'favs' && !searching ? '<h2>Aucun favori</h2><p>Touchez ☆ sur une chaîne pour la retrouver ici.</p>' : '<h2>Aucun résultat</h2><p>Essayez un autre mot-clé.</p>')); return; }
+    if (!list.length) { content.append(el('div', 'empty', '<img class="mascot sm" src="cat.svg" alt="">' + (state.view === 'favs' && !searching ? '<h2>Aucun favori</h2><p>Touchez ☆ sur une chaîne pour la retrouver ici.</p>' : '<h2>Aucun résultat</h2><p>Le chat n\'a rien trouvé. Essayez un autre mot-clé.</p>'))); return; }
     const g = el('div', 'grid'); list.slice(0, state.limit).forEach(c => g.append(card(c))); content.append(g);
     if (list.length > state.limit) { const m = el('button', 'btn ghost more', `Afficher plus (${list.length - state.limit})`); m.onclick = () => { state.limit += 60; render(); }; content.append(m); }
     return;
@@ -187,7 +188,7 @@ function renderHero() {
   const live = state.channels.filter(c => c.kind === 'live'); const pickFrom = live.length ? live : state.channels;
   const c = state.hero && pickFrom.includes(state.hero) ? state.hero : (state.hero = pickFrom[Math.floor(Math.random() * pickFrom.length)]);
   const h = $('#hero'); h.style.setProperty('--hero-bg', `linear-gradient(135deg, ${colorOf(c)}, #0b0d14 90%)`);
-  h.innerHTML = `${c.logo ? `<img class="bgimg" referrerpolicy="no-referrer" alt="" src="${esc(c.logo)}" onerror="this.remove()">` : ''}
+  h.innerHTML = `<img class="peek" src="cat.svg" alt="">${c.logo ? `<img class="bgimg" referrerpolicy="no-referrer" alt="" src="${esc(c.logo)}" onerror="this.remove()">` : ''}
     <div class="info"><span class="tag">À la une · ${esc(catOf(c))}</span><h1>${esc(c.name)}</h1>
     <p>${c.kind === 'live' ? 'En direct maintenant.' : 'Prêt à regarder.'} ${state.channels.length} titres dans votre bibliothèque.</p>
     <div class="row"><button class="btn play" id="heroPlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>Regarder</button>
@@ -196,7 +197,7 @@ function renderHero() {
   $('#heroFav').onclick = () => { toggleFav(c.id); renderHero(); };
 }
 function emptyState() {
-  const e = el('div', 'empty', '<h2>Bienvenue sur Mimou TV</h2><p>Ajoutez votre playlist M3U pour commencer, ou essayez la démo.</p>');
+  const e = el('div', 'empty', '<img class="mascot" src="cat.svg" alt=""><h2>Bienvenue sur Mimou TV</h2><p>Ajoutez votre playlist M3U pour commencer, ou essayez la démo.</p>');
   const b = el('button', 'btn', 'Ajouter une source'); b.onclick = () => openSource(); e.append(b); return e;
 }
 function go(view, cat = 'all') { state.view = view; state.cat = cat; state.limit = 60; $('#search').value = ''; state.query = ''; render(); scrollTo({ top: 0 }); }
@@ -239,7 +240,7 @@ function zap(d) {
   const q = state.queue; if (q.length < 2) return; const i = q.findIndex(x => x.id === state.current.id);
   play(q[(i + d + q.length) % q.length], q);
 }
-function setStatus(t) { $('#status').textContent = t; }
+function setStatus(t) { $('#statusTxt').textContent = t; $('#status').classList.toggle('on', !!t); }
 function syncFav() { const on = state.favs.has(state.current.id); const b = $('#pFav'); b.textContent = on ? '★' : '☆'; b.classList.toggle('on', on); }
 function buildSide() {
   const s = $('#sideItems'); s.innerHTML = '';

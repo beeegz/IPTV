@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <style>
+    .breath{animation:breath 4s ease-in-out infinite;transform-origin:256px 420px}
+    .eye{animation:blink 5s infinite;transform-box:view-box}
+    .ear-l{animation:twitch 7s infinite;transform-origin:150px 240px}
+    .ear-r{animation:twitch 9s 2s infinite reverse;transform-origin:362px 240px}
+    @keyframes breath{50%{transform:translateY(5px) scale(1.01)}}
+    @keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
+    @keyframes twitch{0%,90%,100%{transform:rotate(0)}93%{transform:rotate(-7deg)}96%{transform:rotate(3deg)}}
+    @media (prefers-reduced-motion:reduce){*{animation:none!important}}</style>
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cff"/><stop offset="1" stop-color="#22b8e6"/></linearGradient>
+  <clipPath id="frame"><rect width="512" height="512" rx="112"/></clipPath></defs>
+  
+  <g class="breath">
+    <!-- poitrail blanc + tache rousse -->
+    <g clip-path="url(#frame)">
+      <path d="M96 540c0-90 70-150 160-150s160 60 160 150z" fill="#fbfaf7"/>
+      <path d="M352 440c40-10 64 20 64 100h-90c20-30 30-70 26-100z" fill="#d98a3d"/>
+    </g>
+    <!-- oreilles -->
+    <g class="ear-l"><polygon points="118,250 128,96 240,176" fill="#8f6f4c" stroke="#8f6f4c" stroke-width="14" stroke-linejoin="round"/>
+      <polygon points="138,226 144,132 210,182" fill="#f0b5ad"/><polygon points="128,96 138,150 170,132" fill="#3a2f28"/></g>
+    <g class="ear-r"><polygon points="394,250 384,96 272,176" fill="#8f6f4c" stroke="#8f6f4c" stroke-width="14" stroke-linejoin="round"/>
+      <polygon points="374,226 368,132 302,182" fill="#f0b5ad"/><polygon points="384,96 374,150 342,132" fill="#3a2f28"/></g>
+    <!-- tête tigrée -->
+    <clipPath id="head"><ellipse cx="256" cy="298" rx="152" ry="124"/></clipPath>
+    <ellipse cx="256" cy="298" rx="152" ry="124" fill="#9a7a55"/>
+    <g clip-path="url(#head)">
+      <path d="M190 160c20-24 112-24 132 0l-20 40h-92z" fill="#3a2f28"/>
+      <path d="M205 206l10 -34M235 200l6 -34M277 200l-6 -34M307 206l-10 -34" stroke="#9a7a55" stroke-width="7" stroke-linecap="round"/>
+      <ellipse cx="206" cy="214" rx="26" ry="34" fill="#d98a3d" transform="rotate(14 206 214)"/>
+      <ellipse cx="306" cy="214" rx="26" ry="34" fill="#d98a3d" transform="rotate(-14 306 214)"/>
+      <path d="M108 292q24 4 44 -2M404 292q-24 4 -44 -2" stroke="#3a2f28" stroke-width="12" stroke-linecap="round" fill="none"/>
+      <!-- liste blanche + museau + joues -->
+      <path d="M236 170q20-14 40 0l16 96q44 30 66 84q-20 80-102 80t-102-80q22-54 66-84z" fill="#fbfaf7"/>
+      <ellipse cx="256" cy="376" rx="128" ry="62" fill="#fbfaf7"/>
+    </g>
+    <!-- yeux -->
+    <g class="eye" style="transform-origin:200px 290px"><path d="M162 292q38-40 76 0q-38 34-76 0z" fill="#b4b982" stroke="#3a2f28" stroke-width="9" stroke-linejoin="round"/><ellipse cx="200" cy="291" rx="5" ry="20" fill="#2b2a1c"/><circle cx="212" cy="283" r="5" fill="#fff" opacity=".8"/></g>
+    <g class="eye" style="transform-origin:312px 290px"><path d="M274 292q38-40 76 0q-38 34-76 0z" fill="#b4b982" stroke="#3a2f28" stroke-width="9" stroke-linejoin="round"/><ellipse cx="312" cy="291" rx="5" ry="20" fill="#2b2a1c"/><circle cx="324" cy="283" r="5" fill="#fff" opacity=".8"/></g>
+    <!-- nez & bouche -->
+    <path d="M232 338q24-12 48 0q-4 22-24 32q-20-10-24-32z" fill="#ec9fa0"/>
+    <path d="M256 370v12m0 0q-12 12-26 2m26-2q12 12 26 2" fill="none" stroke="#b97d7d" stroke-width="5" stroke-linecap="round"/>
+    <g class="whisk" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".9">
+      <path d="M170 354q-50-8-92-30M170 366q-52 4-100 -2M342 354q50-8 92-30M342 366q52 4 100 -2"/>
+    </g>
+  </g>
+</svg>
