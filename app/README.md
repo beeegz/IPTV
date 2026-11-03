@@ -1,4 +1,4 @@
-# Chud IPTV Web
+# Mimou TV
 
 Lecteur IPTV web moderne (HTML/CSS/JS, sans build), inspiré de l'interface de Chud IPTV.
 

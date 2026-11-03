@@ -1,5 +1,5 @@
 'use strict';
-/* Chud IPTV Web — lecteur IPTV : M3U, catégories, recherche, favoris, lecteur HLS */
+/* Mimou TV — lecteur IPTV : M3U, catégories, recherche, favoris, lecteur HLS */
 const $ = (s, r = document) => r.querySelector(s);
 const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -7,8 +7,8 @@ const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLow
 
 /* ---------- Stockage ---------- */
 const store = {
-  get(k, d) { try { const v = localStorage.getItem('chud.' + k); return v ? JSON.parse(v) : d; } catch { return d; } },
-  set(k, v) { try { localStorage.setItem('chud.' + k, JSON.stringify(v)); return true; } catch { return false; } }
+  get(k, d) { try { const v = localStorage.getItem('mimou.' + k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('mimou.' + k, JSON.stringify(v)); return true; } catch { return false; } }
 };
 
 /* ---------- Données de démo (flux de test publics) ---------- */
@@ -196,7 +196,7 @@ function renderHero() {
   $('#heroFav').onclick = () => { toggleFav(c.id); renderHero(); };
 }
 function emptyState() {
-  const e = el('div', 'empty', '<h2>Bienvenue sur Chud IPTV</h2><p>Ajoutez votre playlist M3U pour commencer, ou essayez la démo.</p>');
+  const e = el('div', 'empty', '<h2>Bienvenue sur Mimou TV</h2><p>Ajoutez votre playlist M3U pour commencer, ou essayez la démo.</p>');
   const b = el('button', 'btn', 'Ajouter une source'); b.onclick = () => openSource(); e.append(b); return e;
 }
 function go(view, cat = 'all') { state.view = view; state.cat = cat; state.limit = 60; $('#search').value = ''; state.query = ''; render(); scrollTo({ top: 0 }); }
