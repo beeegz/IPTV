@@ -77,7 +77,7 @@ function kindOf(c) {
   return 'live';
 }
 /* "Films | Action" -> catégorie "Action" */
-const catOf = c => c.group.includes('|') ? c.group.split('|').slice(1).join('|').trim() || c.group : c.group;
+const catOf = c => c.cat || (c.group.includes('|') ? c.group.split('|').slice(1).join('|').trim() || c.group : c.group);
 
 /* ---------- État ---------- */
 const state = {
@@ -113,7 +113,7 @@ function card(c) {
   f.onclick = e => { e.stopPropagation(); toggleFav(c.id); f.classList.toggle('on', state.favs.has(c.id)); f.classList.remove('pop'); void f.offsetWidth; f.classList.add('pop'); f.textContent = state.favs.has(c.id) ? '★' : '☆'; if (state.view === 'favs') render(); };
   b.append(f);
   b.append(el('div', 'cinfo', `<div class="cname">${esc(c.name)}</div><div class="csub">${esc(catOf(c))}</div>`));
-  b.onclick = () => play(c, visible(c));
+  b.onclick = () => c.seriesId ? openSeries(c) : play(c, visible(c));
   b.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.click(); } };
   return b;
 }
@@ -195,7 +195,7 @@ function renderHero() {
     <p>${c.kind === 'live' ? 'En direct maintenant.' : 'Prêt à regarder.'} ${state.channels.length} titres dans votre bibliothèque.</p>
     <div class="row"><button class="btn play" id="heroPlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>Regarder</button>
     <button class="btn play dark" id="heroFav">${state.favs.has(c.id) ? '★ Dans mes favoris' : '☆ Ajouter aux favoris'}</button></div></div>`;
-  $('#heroPlay').onclick = () => play(c, visible(c));
+  $('#heroPlay').onclick = () => c.seriesId ? openSeries(c) : play(c, visible(c));
   $('#heroFav').onclick = () => { toggleFav(c.id); renderHero(); };
 }
 function emptyState() {
@@ -277,21 +277,81 @@ const dlg = $('#sourceDlg');
 function openSource() { $('#srcErr').textContent = ''; dlg.showModal(); }
 $('#addSource').onclick = openSource; $('#srcCancel').onclick = () => dlg.close();
 $('#loadDemo').onclick = () => { setChannels(parseM3U(DEMO_M3U)); dlg.close(); toast('Démo chargée'); };
+let srcT = 'xtream';
+$('#srcType').onclick = e => { const b = e.target.closest('button'); if (!b) return; srcT = b.dataset.t;
+  document.querySelectorAll('#srcType button').forEach(x => x.classList.toggle('on', x === b));
+  $('#fsXtream').hidden = srcT !== 'xtream'; $('#fsM3u').hidden = srcT !== 'm3u'; };
+const xs = store.get('xtream', null);
+if (xs) { $('#xUrl').value = xs.url; $('#xUser').value = xs.user; $('#xPass').value = xs.pass; }
+
+/* ---------- Xtream Codes ---------- */
+const xBase = u => { u = u.trim().replace(/\/+$/, '').replace(/\/(player_api|get|panel_api)\.php.*$/i, ''); return /^https?:\/\//i.test(u) ? u : 'http://' + u; };
+async function xApi(cfg, action, extra = '') {
+  const r = await fetch(`${cfg.base}/player_api.php?username=${encodeURIComponent(cfg.user)}&password=${encodeURIComponent(cfg.pass)}${action ? '&action=' + action : ''}${extra}`);
+  if (!r.ok) throw new Error('Le serveur a répondu ' + r.status + '.');
+  return r.json();
+}
+async function loadXtream(cfg, want, onStep = () => { }) {
+  const info = await xApi(cfg, '');
+  if (!info?.user_info || String(info.user_info.auth) === '0') throw new Error('Identifiants refusés par le serveur.');
+  const out = []; const q = (s, f) => Array.isArray(s) ? s : [];
+  const cats = async a => Object.fromEntries(q(await xApi(cfg, a)).map(c => [String(c.category_id), c.category_name]));
+  if (want.live) {
+    onStep('Chaînes en direct…'); const cm = await cats('get_live_categories');
+    q(await xApi(cfg, 'get_live_streams')).forEach(x => { const g = cm[String(x.category_id)] || 'Divers';
+      out.push({ id: 'xl' + x.stream_id, name: x.name, logo: x.stream_icon || '', group: g, cat: g, kind: 'live', url: `${cfg.base}/live/${cfg.user}/${cfg.pass}/${x.stream_id}.m3u8` }); });
+  }
+  if (want.movies) {
+    onStep('Films…'); const cm = await cats('get_vod_categories');
+    q(await xApi(cfg, 'get_vod_streams')).forEach(x => { const g = cm[String(x.category_id)] || 'Films';
+      out.push({ id: 'xm' + x.stream_id, name: x.name, logo: x.stream_icon || '', group: g, cat: g, kind: 'movies', url: `${cfg.base}/movie/${cfg.user}/${cfg.pass}/${x.stream_id}.${x.container_extension || 'mp4'}` }); });
+  }
+  if (want.series) {
+    onStep('Séries…'); const cm = await cats('get_series_categories');
+    q(await xApi(cfg, 'get_series')).forEach(x => { const g = cm[String(x.category_id)] || 'Séries';
+      out.push({ id: 'xs' + x.series_id, name: x.name, logo: x.cover || '', group: g, cat: g, kind: 'series', seriesId: x.series_id }); });
+  }
+  if (!out.length) throw new Error('Aucun contenu trouvé pour ce compte.');
+  return out;
+}
+async function openSeries(c) {
+  const cfg = store.get('xtream', null); if (!cfg) return toast('Source Xtream introuvable');
+  toast('Chargement des épisodes…');
+  try {
+    const d = await xApi({ ...cfg, base: xBase(cfg.url) }, 'get_series_info', '&series_id=' + c.seriesId);
+    const eps = []; const base = xBase(cfg.url);
+    Object.keys(d.episodes || {}).sort((a, b) => a - b).forEach(sn => (d.episodes[sn] || []).forEach(e =>
+      eps.push({ id: 'xe' + e.id, name: `${c.name} · S${sn}E${e.episode_num}${e.title ? ' – ' + e.title.replace(/^.*?S\d+E\d+\s*-?\s*/i, '') : ''}`, logo: e.info?.movie_image || c.logo, group: c.group, cat: c.cat, kind: 'series',
+        url: `${base}/series/${cfg.user}/${cfg.pass}/${e.id}.${e.container_extension || 'mp4'}` })));
+    if (!eps.length) return toast('Aucun épisode disponible');
+    play(eps[0], eps);
+  } catch { toast('Impossible de charger les épisodes'); }
+}
 $('#sourceForm').onsubmit = async e => {
   e.preventDefault(); const err = $('#srcErr'), ok = $('#srcOk'); err.textContent = '';
-  const url = $('#srcUrl').value.trim(), file = $('#srcFile').files[0];
-  if (!url && !file) { err.textContent = 'Indiquez une URL ou choisissez un fichier.'; return; }
   ok.disabled = true; ok.textContent = 'Import…';
   try {
-    const text = file ? await file.text() : await (await fetch(url)).text();
-    const list = parseM3U(text); if (!list.length) throw new Error('Aucune chaîne trouvée dans ce fichier.');
-    setChannels(list); store.set('source', url || ''); dlg.close(); toast(`${list.length} éléments importés`);
-  } catch (x) { err.textContent = x instanceof TypeError ? 'Impossible de joindre cette URL (réseau ou CORS). Importez plutôt le fichier.' : x.message; }
+    if (srcT === 'xtream') {
+      const url = $('#xUrl').value.trim(), user = $('#xUser').value.trim(), pass = $('#xPass').value;
+      if (!url || !user || !pass) throw new Error('Renseignez l\'URL, l\'utilisateur et le mot de passe.');
+      const cfg = { base: xBase(url), user, pass };
+      const want = { live: $('#xLive').checked, movies: $('#xMovies').checked, series: $('#xSeries').checked };
+      if (!want.live && !want.movies && !want.series) throw new Error('Cochez au moins un type de contenu.');
+      const list = await loadXtream(cfg, want, t => ok.textContent = t);
+      store.set('xtream', { url, user, pass, ...want }); setChannels(list); dlg.close(); toast(`${list.length} éléments importés`);
+    } else {
+      const url = $('#srcUrl').value.trim(), file = $('#srcFile').files[0];
+      if (!url && !file) throw new Error('Indiquez une URL ou choisissez un fichier.');
+      const text = file ? await file.text() : await (await fetch(url)).text();
+      const list = parseM3U(text); if (!list.length) throw new Error('Aucune chaîne trouvée dans ce fichier.');
+      store.set('xtream', null); setChannels(list); dlg.close(); toast(`${list.length} éléments importés`);
+    }
+  } catch (x) { err.textContent = x instanceof TypeError ? 'Connexion impossible (réseau, HTTP bloqué ou CORS). Essayez l\'application Android, ou une adresse en HTTPS.' : x.message; }
   finally { ok.disabled = false; ok.textContent = 'Importer'; }
 };
 function setChannels(list) {
   state.channels = list; state.hero = null; state.favs = new Set([...state.favs].filter(id => list.some(c => c.id === id)) );
-  if (!store.set('channels', list)) toast('Playlist trop volumineuse pour être mémorisée');
+  if (!store.set('channels', list)) { try { localStorage.removeItem('mimou.channels'); } catch { } if (!store.get('xtream', null)) toast('Playlist trop volumineuse pour être mémorisée'); }
   saveFavs(); go('home');
 }
 
@@ -305,3 +365,7 @@ let tt; function toast(m) { const t = $('#toast'); t.textContent = m; t.classLis
 /* ---------- Démarrage ---------- */
 $('#status').insertAdjacentHTML('afterbegin', mascot('wait'));
 render();
+if (!state.channels.length && xs) {
+  const w = { live: xs.live !== false, movies: xs.movies !== false, series: !!xs.series }; toast('Chargement de votre source…');
+  loadXtream({ base: xBase(xs.url), user: xs.user, pass: xs.pass }, w).then(setChannels).catch(() => toast('Source Xtream injoignable'));
+}
