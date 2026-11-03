@@ -3,13 +3,41 @@
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#8b5cff"/><stop offset="1" stop-color="#22b8e6"/>
     </linearGradient>
+    <clipPath id="cat">
+      <ellipse cx="256" cy="302" rx="158" ry="128"/>
+      <polygon points="108,252 122,86 244,170"/>
+      <polygon points="404,252 390,86 268,170"/>
+    </clipPath>
   </defs>
   <rect width="512" height="512" rx="112" fill="url(#g)"/>
-  <!-- antennes -->
-  <path d="M196 96l60 58 60-58" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
-  <!-- écran -->
-  <rect x="86" y="146" width="340" height="256" rx="48" fill="#0b0d14"/>
-  <!-- M -->
-  <path d="M150 346V216l56 70 50-62 50 62 56-70v130" fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- bouton lecture -->
+
+  <!-- chat calicot : blanc, roux, noir -->
+  <g stroke="#fff" stroke-width="14" stroke-linejoin="round" fill="#fff">
+    <ellipse cx="256" cy="302" rx="158" ry="128"/>
+    <polygon points="108,252 122,86 244,170"/>
+    <polygon points="404,252 390,86 268,170"/>
+  </g>
+  <g clip-path="url(#cat)">
+    <path d="M90 60h130l36 120 -20 40 -40 -10 -40 60 -30 140H80z" fill="#f08a24"/>
+    <path d="M340 60h100v420H310l20-120 -30-70 40-70 -20-80z" fill="#1d1d26"/>
+    <ellipse cx="190" cy="196" rx="40" ry="26" fill="#f08a24"/>
+  </g>
+  <!-- intérieur des oreilles -->
+  <polygon points="134,222 140,128 208,176" fill="#ffb3c1" opacity=".85"/>
+  <polygon points="378,222 372,128 304,176" fill="#ffb3c1" opacity=".85"/>
+
+  <!-- yeux -->
+  <ellipse cx="196" cy="286" rx="26" ry="32" fill="#f4c542"/>
+  <ellipse cx="316" cy="286" rx="26" ry="32" fill="#f4c542"/>
+  <ellipse cx="316" cy="286" rx="12" ry="26" fill="#14141c"/>
+  <ellipse cx="196" cy="286" rx="12" ry="26" fill="#14141c"/>
+  <circle cx="203" cy="274" r="7" fill="#fff"/><circle cx="323" cy="274" r="7" fill="#fff"/>
+
+  <!-- museau : nez en forme de bouton lecture -->
+  <path d="M236 332h40l-20 24z" fill="#ff7a93" stroke="#ff7a93" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M256 358v14m0 0c-10 14-30 14-38 4m38-4c10 14 30 14 38 4" fill="none" stroke="#3a2a2a" stroke-width="8" stroke-linecap="round"/>
+  <!-- moustaches -->
+  <g stroke="#3a2a2a" stroke-width="6" stroke-linecap="round" opacity=".7">
+    <path d="M130 340l-58-10M130 358l-58 8M382 340l58-10M382 358l58 8"/>
+  </g>
 </svg>
