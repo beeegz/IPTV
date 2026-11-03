@@ -212,7 +212,7 @@ function play(c, queue) {
   $('#player').hidden = false; document.body.style.overflow = 'hidden';
   $('#pTitle').textContent = c.name; $('#pSub').textContent = catOf(c);
   syncFav(); buildSide(); load(c);
-  history.replaceState(null, '', '#play'); wake();
+  if (location.hash !== '#play') history.pushState(null, '', '#play'); wake();
   if (document.documentElement.requestFullscreen && matchMedia('(max-width:760px)').matches && matchMedia('(orientation:landscape)').matches) document.documentElement.requestFullscreen().catch(() => { });
 }
 function load(c) {
@@ -236,7 +236,7 @@ function teardown() { if (hls) { hls.destroy(); hls = null; } video.removeAttrib
 function closePlayer() {
   teardown(); $('#player').hidden = true; document.body.style.overflow = ''; state.current = null;
   if (document.fullscreenElement) document.exitFullscreen().catch(() => { });
-  if (location.hash === '#play') history.replaceState(null, '', location.pathname); render();
+  if (location.hash === '#play') history.back(); render();
 }
 function zap(d) {
   const q = state.queue; if (q.length < 2) return; const i = q.findIndex(x => x.id === state.current.id);

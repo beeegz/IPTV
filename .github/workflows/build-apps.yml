@@ -1,0 +1,57 @@
+name: Build Mimou TV (Android & iOS)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'app/**'
+      - 'android/**'
+      - 'ios/**'
+      - 'capacitor.config.json'
+      - 'package*.json'
+      - '.github/workflows/build-apps.yml'
+
+jobs:
+  android:
+    name: APK Android
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - run: npm ci
+      - run: npx cap sync android
+      - name: Compiler l'APK (debug, installable directement)
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MimouTV-android-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+  ios:
+    name: IPA iOS (non signé)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npx cap sync ios
+      - name: Compiler sans signature
+        working-directory: ios/App
+        run: |
+          xcodebuild -project App.xcodeproj -scheme App -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build
+      - name: Créer l'IPA (à signer avec Sideloadly / AltStore)
+        run: |
+          mkdir -p Payload
+          cp -R ios/App/build/Build/Products/Release-iphoneos/App.app Payload/
+          zip -qry MimouTV.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MimouTV-ios-ipa
+          path: MimouTV.ipa

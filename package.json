@@ -1,0 +1,17 @@
+{
+  "name": "mimou-tv",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mimou TV – lecteur IPTV (Xtream Codes / M3U)",
+  "scripts": {
+    "sync": "cap sync",
+    "android": "cap open android",
+    "ios": "cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/cli": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/ios": "^8.0.0"
+  }
+}
