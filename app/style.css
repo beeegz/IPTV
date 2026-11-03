@@ -178,12 +178,27 @@ dialog .row{display:flex;gap:8px;margin-top:20px;align-items:center;flex-wrap:wr
 .peek{position:absolute;right:5%;bottom:-6px;width:clamp(120px,17vw,210px);z-index:2;pointer-events:none;animation:peek 1s .3s cubic-bezier(.2,1.4,.4,1) both;filter:drop-shadow(0 -6px 20px #0006)}
 @keyframes peek{from{transform:translateY(100%)}}
 .hero .bgimg{right:calc(4% + 220px)}
-.mascot{width:150px;height:150px;margin-bottom:14px;animation:float2 3.5s ease-in-out infinite}
-.mascot.sm{width:96px;height:96px}
+.mascot{width:130px;margin:0 auto 14px;animation:float2 3.5s ease-in-out infinite}
+.mascot.sm{width:90px}
 @keyframes float2{50%{transform:translateY(-8px) rotate(-3deg)}}
 .status{flex-direction:column;gap:10px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
 .status.on{opacity:1;background:#0006}
-.status img{width:84px;height:84px;animation:bounce 1s ease-in-out infinite}
+.status .cat{width:80px;animation:bounce 1s ease-in-out infinite}
 @keyframes bounce{50%{transform:translateY(-12px)}}
 .toast::before{content:"🐾 "}
 @media (max-width:760px){.peek{width:104px;right:3%}.hero .bgimg{right:-10%}}
+
+/* mascotte : chat assis */
+.cat{position:relative;aspect-ratio:640/875;display:block}
+.cat img{display:block;width:100%;height:100%}
+.cat-body{transform-origin:50% 100%;animation:breathe 4s ease-in-out infinite}
+.cat-head{position:absolute;inset:0;transform-origin:25% 36%;animation:tilt 6s ease-in-out infinite}
+.cat-head img{position:absolute;inset:0}
+.lid{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scaleY(0);transform-origin:center;animation:lid 5s infinite}
+.lid.n{left:22%;top:20.8%;width:9%;height:4.6%;background:#7b5a40}
+.lid.f{left:9.9%;top:19.8%;width:6%;height:4%;background:#e58a3a;animation-delay:.02s}
+@keyframes breathe{50%{transform:scaleY(1.012)}}
+@keyframes tilt{0%,100%{transform:rotate(0)}35%{transform:rotate(-3deg)}70%{transform:rotate(2deg)}}
+@keyframes lid{0%,92%,100%{transform:translate(-50%,-50%) scaleY(0)}95%{transform:translate(-50%,-50%) scaleY(1)}}
+.cat.peek{position:absolute;aspect-ratio:640/875;width:clamp(110px,15vw,200px);height:auto}
+@media (max-width:760px){.peek.cat{width:84px}}
