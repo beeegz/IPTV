@@ -11,6 +11,9 @@ on:
       - 'package*.json'
       - '.github/workflows/build-apps.yml'
 
+permissions:
+  contents: write
+
 jobs:
   android:
     name: APK Android
@@ -55,3 +58,38 @@ jobs:
         with:
           name: MimouTV-ios-ipa
           path: MimouTV.ipa
+
+  publish:
+    name: Publier les téléchargements
+    needs: [android, ios]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: gh-pages, path: site }
+      - uses: actions/download-artifact@v4
+        with: { name: MimouTV-android-apk, path: dl-apk }
+      - uses: actions/download-artifact@v4
+        with: { name: MimouTV-ios-ipa, path: dl-ipa }
+      - name: Pousser sur gh-pages
+        working-directory: site
+        run: |
+          mkdir -p download
+          cp ../dl-apk/app-debug.apk download/MimouTV.apk
+          cp ../dl-ipa/MimouTV.ipa download/MimouTV.ipa
+          cat > download/index.html <<'HTML'
+          <!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>Télécharger Mimou TV</title>
+          <body style="font:18px system-ui;background:#0b0d14;color:#eef1f8;text-align:center;padding:12vh 20px">
+          <h1>Mimou TV</h1>
+          <p><a style="color:#22b8e6" href="MimouTV.apk">⬇ Android (APK)</a></p>
+          <p><a style="color:#22b8e6" href="MimouTV.ipa">⬇ iPhone (IPA, à signer avec Sideloadly / AltStore)</a></p>
+          <p><a style="color:#8f98b3" href="../">Ouvrir la version web</a></p>
+          </body>
+          HTML
+          sed -i 's/^          //' download/index.html
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "Mise à jour des téléchargements"
+          git pull --rebase -q origin gh-pages || true
+          git push origin HEAD:gh-pages
